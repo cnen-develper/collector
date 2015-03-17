@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import com.cnendata.dev.collector.model.Product;
 import com.cnendata.dev.collector.parser.AbstractParser;
+import com.cnendata.dev.util.Strings;
 
 /**
  * 当当网商品详情解析器<br>
@@ -42,10 +43,23 @@ public class DangdangParser extends AbstractParser {
 	public Product parse(Document doc) {
 
 		try {
+			Product book = new Product();
 			Element element = doc.getElementsByClass("show_info_autoheight")
 					.get(0);
 			String name = element.getElementsByClass("head").get(0).text();
-			Product book = new Product();
+			Element priceEl = element.getElementsByClass("sale").get(0);
+			String priceTag = Strings.get(
+					priceEl.getElementsByClass("show_info_left").text()
+							.replaceAll("\\s", ""), "([\u4e00-\u9fa5]{1,4})");
+			if (priceTag.contains("抢购价")) {
+				String price = priceEl.getElementById("promo_price").attr(
+						"prpr");
+				book.setShopPrice(Float.valueOf(price));
+			} else if (priceTag.contains("当当价")) {
+				String price = priceEl.getElementById("salePriceTag").text();
+				book.setShopPrice(Float.valueOf(price));
+			}
+
 			book.setName(name);
 			logger.info("parse book");
 			return book;
@@ -55,5 +69,4 @@ public class DangdangParser extends AbstractParser {
 		return null;
 
 	}
-
 }

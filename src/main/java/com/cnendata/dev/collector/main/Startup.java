@@ -40,15 +40,16 @@ public class Startup {
 	 */
 	public static void main(String[] args) throws Exception {
 		logger.debug("collector startup...");
+		// 读取config.properties配置文件中的线程池数量
 		Properties prop = PropertiesUtil.getProperties("/config.properties");
 		System.setProperty("collectorCode",
 				String.valueOf(prop.get("collectorCode")));
 
-		// 读取config.properties配置文件中的线程池数量，初始化线程池
+		// 初始化线程池
 		ThreadPool threadPool = ThreadPool.getThreadPool(Integer.valueOf(String
 				.valueOf(prop.get("threadCount"))));
 
-		// 读取config.properties中的mq配置，启动与activemq的连接
+		// 启动jms管理器
 		JmsQueueManager.getInstance().init(prop);
 		// 启动主采集器
 		new CollectorManager().start();

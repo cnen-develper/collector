@@ -48,8 +48,6 @@ public class DocumentQueue {
 
 	public void push(MyDocument doc) {
 		list.offer(doc);
-		logger.debug("push doc" + doc.getDoc().title());
-
 	}
 
 	public MyDocument take() {

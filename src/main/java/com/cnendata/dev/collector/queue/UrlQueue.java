@@ -48,8 +48,6 @@ public class UrlQueue {
 
 	public void push(MyUrl url) {
 		list.offer(url);
-		logger.debug("push url");
-
 	}
 
 	public MyUrl take() {
