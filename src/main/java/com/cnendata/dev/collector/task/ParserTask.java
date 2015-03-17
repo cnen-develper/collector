@@ -7,12 +7,14 @@
  */
 package com.cnendata.dev.collector.task;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.cnendata.dev.collector.jms.ApplicationRequest;
 import com.cnendata.dev.collector.jms.ExectueResultSendWorker;
 import com.cnendata.dev.collector.model.MyDocument;
 import com.cnendata.dev.collector.model.Product;
 import com.cnendata.dev.collector.parser.AbstractParser;
-import com.cnendata.dev.collector.parser.ParserSelector;
 
 /**
  * 解析document的任务<br>
@@ -28,19 +30,24 @@ import com.cnendata.dev.collector.parser.ParserSelector;
  *         since1.0
  */
 public class ParserTask extends AbstractTask {
+
+	private static Logger logger = LoggerFactory.getLogger(ParserTask.class);
 	private MyDocument doc = null;
 
 	public ParserTask(MyDocument doc) {
-
 		this.doc = doc;
 	}
 
 	@Override
 	public void execute() {
-		AbstractParser parser = ParserSelector.getInstance().getParser(
-				doc.getType());
-		Product product = parser.parse(doc.getDoc());
-		ExectueResultSendWorker.getInstance().doSendResultToKernel(
-				new ApplicationRequest(product));
+		try {
+			AbstractParser parser = (AbstractParser) Class.forName(
+					doc.getType()).newInstance();
+			Product product = parser.parse(doc.getDoc());
+			ExectueResultSendWorker.getInstance().doSendResultToKernel(
+					new ApplicationRequest(product));
+		} catch (Exception e) {
+			logger.error("execute parse Document error", e);
+		}
 	}
 }

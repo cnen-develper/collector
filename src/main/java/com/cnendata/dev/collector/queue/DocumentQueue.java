@@ -10,6 +10,9 @@ package com.cnendata.dev.collector.queue;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.cnendata.dev.collector.model.MyDocument;
 
 /**
@@ -26,6 +29,8 @@ import com.cnendata.dev.collector.model.MyDocument;
  *         since1.0
  */
 public class DocumentQueue {
+
+	private static Logger logger = LoggerFactory.getLogger(DocumentQueue.class);
 	private static BlockingDeque<MyDocument> list = null;
 	static DocumentQueue instance;
 
@@ -36,13 +41,14 @@ public class DocumentQueue {
 	public static DocumentQueue getInstance() {
 		if (instance == null) {
 			instance = new DocumentQueue();
-			list = new LinkedBlockingDeque<MyDocument>(50);
+			list = new LinkedBlockingDeque<MyDocument>(100);
 		}
 		return instance;
 	}
 
 	public void push(MyDocument doc) {
 		list.offer(doc);
+		logger.debug("push doc" + doc.getDoc().title());
 
 	}
 

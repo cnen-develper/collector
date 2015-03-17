@@ -55,7 +55,6 @@ public class DangdangCollector implements ICollector {
 			for (int i = 0; i < lis.size(); i++) {
 				String url1 = lis.get(i).getElementsByTag("a").get(0)
 						.attr("href");
-				logger.debug("level 1:" + url1);
 				this.collectCate2(url1);
 			}
 		} catch (IOException e) {
@@ -72,15 +71,16 @@ public class DangdangCollector implements ICollector {
 	private void collectCate2(String url1) {
 
 		try {
-			Document doc = Jsoup.connect(url1).timeout(60000).get();
+			Document doc = Jsoup
+					.connect("http://category.dangdang.com/" + url1)
+					.timeout(60000).get();
 			Elements lis = doc.getElementById("leftCate")
 					.getElementsByClass("on").get(0).getElementsByTag("div")
 					.get(0).getElementsByTag("span");
 			for (int i = 0; i < lis.size(); i++) {
 				String url2 = lis.get(i).getElementsByTag("a").get(0)
 						.attr("href");
-				logger.debug("level 2:" + url2);
-				this.collectCate3(url2);
+				this.getProductUrl(url2);
 			}
 		} catch (IOException e) {
 			logger.error("collector dangdang main url error", e);
@@ -93,17 +93,20 @@ public class DangdangCollector implements ICollector {
 	 * 
 	 * @param url3
 	 */
-	private void collectCate3(String url3) {
+	private void getProductUrl(String url3) {
 
 		try {
-			Document doc = Jsoup.connect(url3).timeout(60000).get();
-			Elements lis = doc.getElementById("leftCate")
-					.getElementsByClass("on").get(0).getElementsByTag("div")
-					.get(0).getElementsByTag("span");
+			Document doc = Jsoup
+					.connect("http://category.dangdang.com/" + url3)
+					.timeout(60000).get();
+			Elements lis = doc.getElementsByClass("shoplist").get(0)
+					.getElementsByClass("list_aa").get(0)
+					.getElementsByTag("li");
 			for (int i = 0; i < lis.size(); i++) {
 				String url4 = lis.get(i).getElementsByTag("a").get(0)
 						.attr("href");
-				UrlQueue.getInstance().push(new MyUrl(null, url4));
+				UrlQueue.getInstance().push(
+						new MyUrl(DangdangParser.class.getName(), url4));
 
 			}
 		} catch (IOException e) {
@@ -111,5 +114,4 @@ public class DangdangCollector implements ICollector {
 		}
 
 	}
-
 }

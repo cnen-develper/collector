@@ -8,6 +8,9 @@
 package com.cnendata.dev.collector.website.dangdang;
 
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.cnendata.dev.collector.model.Product;
 import com.cnendata.dev.collector.parser.AbstractParser;
@@ -26,6 +29,8 @@ import com.cnendata.dev.collector.parser.AbstractParser;
  *         since1.0
  */
 public class DangdangParser extends AbstractParser {
+	private static Logger logger = LoggerFactory
+			.getLogger(DangdangParser.class);
 
 	/*
 	 * (non-Javadoc)
@@ -35,6 +40,18 @@ public class DangdangParser extends AbstractParser {
 	 */
 	@Override
 	public Product parse(Document doc) {
+
+		try {
+			Element element = doc.getElementsByClass("show_info_autoheight")
+					.get(0);
+			String name = element.getElementsByClass("head").get(0).text();
+			Product book = new Product();
+			book.setName(name);
+			logger.info("parse book");
+			return book;
+		} catch (Exception e) {
+			logger.error("parse Document error ", e);
+		}
 		return null;
 
 	}

@@ -26,8 +26,16 @@ import com.cnendata.dev.collector.threadpool.ThreadPool;
  * 
  *         since1.0
  */
-public class DocumentEngine {
-	public void bootstrap(ThreadPool threadPool) {
+public class DocumentEngine extends Thread {
+
+	private ThreadPool threadPool = null;
+
+	public DocumentEngine(ThreadPool th) {
+		this.threadPool = th;
+	}
+
+	@Override
+	public void run() {
 		while (true) {
 			MyDocument doc = DocumentQueue.getInstance().take();
 			if (doc != null) {
@@ -36,4 +44,5 @@ public class DocumentEngine {
 			}
 		}
 	}
+
 }

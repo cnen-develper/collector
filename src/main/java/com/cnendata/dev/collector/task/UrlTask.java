@@ -39,7 +39,7 @@ public class UrlTask extends AbstractTask {
 	@Override
 	public void execute() {
 		try {
-			Document doc = Jsoup.connect(url.getUrl()).get();
+			Document doc = Jsoup.connect(url.getUrl()).timeout(60000).get();
 			DocumentQueue.getInstance()
 					.push(new MyDocument(url.getType(), doc));
 

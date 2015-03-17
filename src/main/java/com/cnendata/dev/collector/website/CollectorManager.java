@@ -10,6 +10,9 @@ package com.cnendata.dev.collector.website;
 import java.util.Enumeration;
 import java.util.Properties;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.cnendata.dev.collector.parser.ICollector;
 import com.cnendata.dev.util.PropertiesUtil;
 
@@ -26,16 +29,26 @@ import com.cnendata.dev.util.PropertiesUtil;
  * 
  *         since1.0
  */
-public class CollectorManager {
-	public void start() throws Exception {
-		Properties prop = PropertiesUtil.getProperties("/collector.properties");
-		Enumeration<Object> keys = prop.keys();
-		while (keys.hasMoreElements()) {
-			String className = prop.getProperty(String.valueOf(keys
-					.nextElement()));
-			ICollector collector = (ICollector) Class.forName(className)
-					.newInstance();
-			collector.collect();
+public class CollectorManager extends Thread {
+
+	private static Logger logger = LoggerFactory
+			.getLogger(CollectorManager.class);
+
+	@Override
+	public void run() {
+		try {
+			Properties prop = PropertiesUtil
+					.getProperties("/collector.properties");
+			Enumeration<Object> keys = prop.keys();
+			while (keys.hasMoreElements()) {
+				String className = prop.getProperty(String.valueOf(keys
+						.nextElement()));
+				ICollector collector = (ICollector) Class.forName(className)
+						.newInstance();
+				collector.collect();
+			}
+		} catch (Exception e) {
+			logger.error("init collectorManager", e);
 		}
 	}
 }

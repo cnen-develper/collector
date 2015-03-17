@@ -10,6 +10,9 @@ package com.cnendata.dev.collector.queue;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.cnendata.dev.collector.model.MyUrl;
 
 /**
@@ -26,6 +29,8 @@ import com.cnendata.dev.collector.model.MyUrl;
  *         since1.0
  */
 public class UrlQueue {
+
+	private static Logger logger = LoggerFactory.getLogger(UrlQueue.class);
 	private static BlockingDeque<MyUrl> list = null;
 	static UrlQueue instance;
 
@@ -36,13 +41,14 @@ public class UrlQueue {
 	public static UrlQueue getInstance() {
 		if (instance == null) {
 			instance = new UrlQueue();
-			list = new LinkedBlockingDeque<MyUrl>(50);
+			list = new LinkedBlockingDeque<MyUrl>(100);
 		}
 		return instance;
 	}
 
 	public void push(MyUrl url) {
 		list.offer(url);
+		logger.debug("push url");
 
 	}
 

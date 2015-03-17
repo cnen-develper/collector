@@ -53,9 +53,9 @@ public class Startup {
 		// 启动主采集器
 		new CollectorManager().start();
 		// 启动url处理引擎
-		new UrlEngine().bootstrap(threadPool);
+		new UrlEngine(threadPool).start();
 		// 启动document解析引擎
-		new DocumentEngine().bootstrap(threadPool);
+		new DocumentEngine(threadPool).start();
 
 	}
 

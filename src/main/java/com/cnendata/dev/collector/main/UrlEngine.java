@@ -26,8 +26,15 @@ import com.cnendata.dev.collector.threadpool.ThreadPool;
  * 
  *         since1.0
  */
-public class UrlEngine {
-	public void bootstrap(ThreadPool threadPool) {
+public class UrlEngine extends Thread {
+	private ThreadPool threadPool = null;
+
+	public UrlEngine(ThreadPool th) {
+		this.threadPool = th;
+	}
+
+	@Override
+	public void run() {
 
 		while (true) {
 			MyUrl url = UrlQueue.getInstance().take();
@@ -38,4 +45,5 @@ public class UrlEngine {
 		}
 
 	}
+
 }
