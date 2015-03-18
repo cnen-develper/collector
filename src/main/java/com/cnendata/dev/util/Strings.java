@@ -24,6 +24,15 @@ import java.util.regex.Pattern;
  *         since1.0
  */
 public class Strings {
+	/**
+	 * 提取正则表达式匹配的字符并返回
+	 * 
+	 * @param src
+	 *            源字符串
+	 * @param reg
+	 *            正则表达式
+	 * @return 正则表达式匹配的字符串
+	 */
 	public static String get(String src, String reg) {
 		Pattern pattern = Pattern.compile(reg);
 		Matcher matcher = pattern.matcher(src);
@@ -32,5 +41,25 @@ public class Strings {
 			result.append(matcher.group());
 		}
 		return result.toString();
+	}
+
+	/**
+	 * 抽取给定字符串中得所有汉字字符并返回
+	 * 
+	 * @param src
+	 * @return
+	 */
+	public static String getCnCharacter(String src) {
+		return get(src, "([\u4e00-\u9fa5]{1,4})");
+	}
+
+	/**
+	 * 抽取给定字符串中得所有英文字符并返回
+	 * 
+	 * @param src
+	 * @return
+	 */
+	public static String getEnCharacter(String src) {
+		return get(src, "[a-zA-Z]");
 	}
 }

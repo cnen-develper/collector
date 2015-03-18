@@ -35,13 +35,14 @@ public class DocumentQueue {
 	static DocumentQueue instance;
 
 	private DocumentQueue() {
+		list = new LinkedBlockingDeque<MyDocument>(100);
 
 	}
 
 	public static DocumentQueue getInstance() {
 		if (instance == null) {
 			instance = new DocumentQueue();
-			list = new LinkedBlockingDeque<MyDocument>(100);
+
 		}
 		return instance;
 	}

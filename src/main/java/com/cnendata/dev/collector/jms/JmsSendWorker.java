@@ -10,22 +10,21 @@ import javax.jms.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ExectueResultSendWorker {
-	private static Logger logger = LoggerFactory
-			.getLogger(ExectueResultSendWorker.class);
+public class JmsSendWorker {
+	private static Logger logger = LoggerFactory.getLogger(JmsSendWorker.class);
 
 	private long timeToLive = 1200000L;
 
-	private static ExectueResultSendWorker instance;
+	private static JmsSendWorker instance;
 
-	public static ExectueResultSendWorker getInstance() {
+	public static JmsSendWorker getInstance() {
 		if (instance == null) {
-			instance = new ExectueResultSendWorker();
+			instance = new JmsSendWorker();
 		}
 		return instance;
 	}
 
-	private ExectueResultSendWorker() {
+	private JmsSendWorker() {
 		init();
 	}
 

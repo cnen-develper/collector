@@ -7,8 +7,11 @@
  */
 package com.cnendata.dev.collector.website.dangdang;
 
+import java.text.SimpleDateFormat;
+
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,11 +49,15 @@ public class DangdangParser extends AbstractParser {
 			Product book = new Product();
 			Element element = doc.getElementsByClass("show_info_autoheight")
 					.get(0);
-			String name = element.getElementsByClass("head").get(0).text();
+			Element headEl = element.getElementsByClass("head").get(0);
+			if (headEl.getElementsByClass("subtitle").size() > 0) {
+				headEl.select(".subtitle").remove();
+			}
+			String name = headEl.text();
+			// subtitle
 			Element priceEl = element.getElementsByClass("sale").get(0);
-			String priceTag = Strings.get(
-					priceEl.getElementsByClass("show_info_left").text()
-							.replaceAll("\\s", ""), "([\u4e00-\u9fa5]{1,4})");
+			String priceTag = Strings.getCnCharacter(priceEl
+					.getElementsByClass("show_info_left").text());
 			if (priceTag.contains("抢购价")) {
 				String price = priceEl.getElementById("promo_price").attr(
 						"prpr");
@@ -59,9 +66,46 @@ public class DangdangParser extends AbstractParser {
 				String price = priceEl.getElementById("salePriceTag").text();
 				book.setShopPrice(Float.valueOf(price));
 			}
+			Elements bookInfoEls = doc.getElementsByClass("book_messbox")
+					.get(0).getElementsByClass("clearfix");
+			for (int i = 0; i < bookInfoEls.size(); i++) {
+				Element tmpEl = bookInfoEls.get(i);
+				String tagSrc = tmpEl.getElementsByClass("show_info_left")
+						.get(0).text();
+				String tagCn = Strings.getCnCharacter(tagSrc);
+				String value = tmpEl.getElementsByClass("show_info_right")
+						.get(0).text();
+				logger.debug(tagCn + "=" + value);
+				if (tagCn.contains("作者")) {
+					book.setAuthor(value);
+				} else if (tagCn.contains("出版社")) {
+					book.setPublisher(value);
+				} else if (tagCn.contains("出版时间")) {
+					book.setPublishDate(new SimpleDateFormat("yyyy-MM-dd")
+							.parse(value));
+				} else if (tagCn == null || tagCn.equals("")) {
+					if (tagSrc.contains("ＩＳＢＮ")) {
+						book.setIsbn(value);
+					}
+				}
+			}
+			Element contentEl = doc.getElementById("content")
+					.getElementsByClass("descrip").get(0)
+					.getElementsByTag("textarea").get(0);
+			try {
+				contentEl.select("span").remove();
+				contentEl.select("strong").remove();
+			} catch (Exception e) {
+
+			}
+			String[] tmp = contentEl.text().split("p");
+			if (tmp.length == 1) {
+				book.setDescript(tmp[0]);
+			} else {
+				book.setDescript(tmp[1]);
+			}
 
 			book.setName(name);
-			logger.info("parse book");
 			return book;
 		} catch (Exception e) {
 			logger.error("parse Document error ", e);

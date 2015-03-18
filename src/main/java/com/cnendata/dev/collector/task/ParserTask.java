@@ -11,7 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.cnendata.dev.collector.jms.ApplicationRequest;
-import com.cnendata.dev.collector.jms.ExectueResultSendWorker;
+import com.cnendata.dev.collector.jms.JmsSendWorker;
 import com.cnendata.dev.collector.model.MyDocument;
 import com.cnendata.dev.collector.model.Product;
 import com.cnendata.dev.collector.parser.AbstractParser;
@@ -44,7 +44,7 @@ public class ParserTask extends AbstractTask {
 			AbstractParser parser = (AbstractParser) Class.forName(
 					doc.getType()).newInstance();
 			Product product = parser.parse(doc.getDoc());
-			ExectueResultSendWorker.getInstance().doSendResultToKernel(
+			JmsSendWorker.getInstance().doSendResultToKernel(
 					new ApplicationRequest(product));
 		} catch (Exception e) {
 			logger.error("execute parse Document error", e);
