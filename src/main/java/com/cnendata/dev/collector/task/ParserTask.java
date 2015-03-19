@@ -7,14 +7,14 @@
  */
 package com.cnendata.dev.collector.task;
 
+import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.cnendata.dev.collector.jms.ApplicationRequest;
 import com.cnendata.dev.collector.jms.JmsSendWorker;
-import com.cnendata.dev.collector.model.MyDocument;
 import com.cnendata.dev.collector.model.Product;
-import com.cnendata.dev.collector.parser.AbstractParser;
+import com.cnendata.dev.collector.parser.IParser;
 
 /**
  * 解析document的任务<br>
@@ -29,21 +29,25 @@ import com.cnendata.dev.collector.parser.AbstractParser;
  * 
  *         since1.0
  */
-public class ParserTask extends AbstractTask {
+public class ParserTask implements ITask {
 
 	private static Logger logger = LoggerFactory.getLogger(ParserTask.class);
-	private MyDocument doc = null;
+	private Document doc;
+	private String parser;
+	private String url;
 
-	public ParserTask(MyDocument doc) {
+	public ParserTask(Document doc, String parser, String url) {
 		this.doc = doc;
+		this.parser = parser;
+		this.url = url;
 	}
 
-	@Override
 	public void execute() {
 		try {
-			AbstractParser parser = (AbstractParser) Class.forName(
-					doc.getType()).newInstance();
-			Product product = parser.parse(doc.getDoc());
+			IParser parserInstance = (IParser) Class.forName(
+					parser).newInstance();
+			Product product = parserInstance.parse(doc);
+			product.setUrl(url);
 			JmsSendWorker.getInstance().doSendResultToKernel(
 					new ApplicationRequest(product));
 		} catch (Exception e) {

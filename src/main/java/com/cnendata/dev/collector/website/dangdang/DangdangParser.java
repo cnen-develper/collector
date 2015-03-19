@@ -16,7 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.cnendata.dev.collector.model.Product;
-import com.cnendata.dev.collector.parser.AbstractParser;
+import com.cnendata.dev.collector.parser.IParser;
 import com.cnendata.dev.util.Strings;
 
 /**
@@ -32,17 +32,15 @@ import com.cnendata.dev.util.Strings;
  * 
  *         since1.0
  */
-public class DangdangParser extends AbstractParser {
+public class DangdangParser implements IParser {
 	private static Logger logger = LoggerFactory
 			.getLogger(DangdangParser.class);
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.cnendata.dev.parser.AbstractParser#parse(org.jsoup.nodes.Document)
+	 * @see com.cnendata.dev.parser.IParser#parse(org.jsoup.nodes.Document)
 	 */
-	@Override
 	public Product parse(Document doc) {
 
 		try {

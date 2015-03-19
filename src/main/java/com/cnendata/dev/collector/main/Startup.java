@@ -13,6 +13,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.cnendata.dev.collector.jms.JmsQueueManager;
+import com.cnendata.dev.collector.queue.IQueue;
+import com.cnendata.dev.collector.queue.QueueImpl;
+import com.cnendata.dev.collector.queue.QueueManager;
+import com.cnendata.dev.collector.threadpool.IThreadPool;
+import com.cnendata.dev.collector.threadpool.ThreadPoolImpl;
 import com.cnendata.dev.collector.website.CollectorManager;
 import com.cnendata.dev.util.PropertiesUtil;
 
@@ -50,12 +55,25 @@ public class Startup {
 
 		// 启动jms管理器
 		JmsQueueManager.getInstance().init(prop);
-		// 启动主采集器
-		new CollectorManager().start();
+
+		// ThreadPoolFactory.getInstance();
+		IQueue urlQueue = new QueueImpl();
+		IQueue docQueue = new QueueImpl();
+		// IQueue[] queues = { new QueueImpl(), new QueueImpl() };
+		QueueManager.getInstance().put(QueueManager.URL_QUEUE, urlQueue);
+		QueueManager.getInstance().put(QueueManager.DOC_QUEUE, docQueue);
+		IThreadPool urlPool = new ThreadPoolImpl(urlQueue);
+		urlPool.init(Integer.valueOf(prop.getProperty("threadCount")));
+		IThreadPool docPool = new ThreadPoolImpl(docQueue);
+		docPool.init(Integer.valueOf(prop.getProperty("threadCount")));
+
 		// 启动url处理引擎
-		new UrlEngine().start();
+		// new UrlEngine().start();
 		// 启动document解析引擎
-		new DocumentEngine().start();
+		// new DocumentEngine().start();
+		System.out.println("aaa");
+		// 启动主采集器
+		new CollectorManager(urlQueue).start();
 
 	}
 

@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.cnendata.dev.collector.parser.ICollector;
+import com.cnendata.dev.collector.queue.IQueue;
 import com.cnendata.dev.util.PropertiesUtil;
 
 /**
@@ -33,6 +34,11 @@ public class CollectorManager extends Thread {
 
 	private static Logger logger = LoggerFactory
 			.getLogger(CollectorManager.class);
+	private IQueue queue;
+
+	public CollectorManager(IQueue queue) {
+		this.queue = queue;
+	}
 
 	@Override
 	public void run() {
@@ -45,7 +51,7 @@ public class CollectorManager extends Thread {
 						.nextElement()));
 				ICollector collector = (ICollector) Class.forName(className)
 						.newInstance();
-				collector.collect();
+				collector.collect(queue);
 			}
 		} catch (Exception e) {
 			logger.error("init collectorManager", e);

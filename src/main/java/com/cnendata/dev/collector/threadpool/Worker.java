@@ -10,7 +10,8 @@ package com.cnendata.dev.collector.threadpool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.cnendata.dev.collector.task.AbstractTask;
+import com.cnendata.dev.collector.queue.IQueue;
+import com.cnendata.dev.collector.task.ITask;
 
 /**
  * 工作线程<br>
@@ -35,24 +36,26 @@ extends Thread {
 	private int id;// 线程id
 	private int status;// 0:idle,1:busy
 	private boolean isRunning = true;
+	private IQueue queue;
 
-	public Worker(int id) {
+	public Worker(int id, IQueue queue) {
 		super();
 		this.id = id;
 		status = 0;
+		this.queue = queue;
 	}
 
-	private AbstractTask task;
+	private ITask task;
 
 	public int getStatus() {
 		return status;
 	}
 
-	public AbstractTask getTask() {
+	public ITask getTask() {
 		return task;
 	}
 
-	public synchronized void startTask(AbstractTask task) {
+	public synchronized void startTask(ITask task) {
 		this.task = task;
 		notify();
 	}
@@ -60,22 +63,27 @@ extends Thread {
 	@Override
 	public synchronized void run() {
 		while (isRunning) {
-			if (this.status == Worker.IDLE && this.task != null) {
-				this.status = Worker.BUSY;
-				logger.info("Thread " + id + "start task");
-				this.task.execute();
+			ITask task = queue.take();
+			task.execute();
+			// new UrlTask(UrlQueue.getInstance().take()).execute();
 
-				this.status = Worker.IDLE;
-				this.task = null;
-			} else {
-				try {
-					logger.debug("Thread " + id + "wait...");
-					wait();
-				} catch (InterruptedException e) {
-
-					e.printStackTrace();
-				}
-			}
+			// if (this.status == Worker.IDLE && this.task != null) {
+			// this.status = Worker.BUSY;
+			// logger.info("Thread " + id + "start task");
+			// this.task.execute();
+			//
+			// this.status = Worker.IDLE;
+			// this.task = null;
+			// } else {
+			// try {
+			// logger.debug("Thread " + id + "wait...");
+			// wait();
+			// logger.debug("Thread " + id + "是否被唤醒...");
+			// } catch (InterruptedException e) {
+			//
+			// e.printStackTrace();
+			// }
+			// }
 		}
 	}
 

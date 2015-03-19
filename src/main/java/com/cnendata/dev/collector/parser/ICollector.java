@@ -7,6 +7,8 @@
  */
 package com.cnendata.dev.collector.parser;
 
+import com.cnendata.dev.collector.queue.IQueue;
+
 /**
  * 主采集器接口<br>
  * <!--<br>
@@ -21,5 +23,5 @@ package com.cnendata.dev.collector.parser;
  *         since1.0
  */
 public interface ICollector {
-	public void collect();
+	public void collect(IQueue urlQueue);
 }

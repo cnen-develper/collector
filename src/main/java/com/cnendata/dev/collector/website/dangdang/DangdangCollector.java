@@ -15,9 +15,9 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.cnendata.dev.collector.model.MyUrl;
 import com.cnendata.dev.collector.parser.ICollector;
-import com.cnendata.dev.collector.queue.UrlQueue;
+import com.cnendata.dev.collector.queue.IQueue;
+import com.cnendata.dev.collector.task.UrlTask;
 
 /**
  * descript<br>
@@ -36,9 +36,12 @@ public class DangdangCollector implements ICollector {
 	private static Logger logger = LoggerFactory
 			.getLogger(DangdangCollector.class);
 	String url = "http://category.dangdang.com/cp01.00.00.00.00.00.html";
+	private IQueue uqlQueue;
 
-	public void collect() {
+	public void collect(IQueue uqlQueue) {
+		this.uqlQueue = uqlQueue;
 		this.collectCate1(url);
+
 	}
 
 	/**
@@ -57,7 +60,7 @@ public class DangdangCollector implements ICollector {
 						.attr("href");
 				this.collectCate2(url1);
 			}
-		} catch (IOException e) {
+		} catch (Exception e) {
 			logger.error("collector dangdang main url error", e);
 		}
 
@@ -105,8 +108,7 @@ public class DangdangCollector implements ICollector {
 			for (int i = 0; i < lis.size(); i++) {
 				String url4 = lis.get(i).getElementsByTag("a").get(0)
 						.attr("href");
-				UrlQueue.getInstance().push(
-						new MyUrl(DangdangParser.class.getName(), url4));
+				uqlQueue.push(new UrlTask(DangdangParser.class, url4));
 
 			}
 		} catch (IOException e) {

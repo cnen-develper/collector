@@ -1,14 +1,18 @@
 /**
- *AbstractTask.java
+ *AbstractParser.java
  *Version1.0
  *2015-3-16
  *Copyright cnendata.com
  *
  */
-package com.cnendata.dev.collector.task;
+package com.cnendata.dev.collector.parser;
+
+import org.jsoup.nodes.Document;
+
+import com.cnendata.dev.collector.model.Product;
 
 /**
- * descript<br>
+ * 抽象的商品详情解析类<br>
  * <!--<br>
  * 历史记录：<br>
  * --------------------------------------------------------
@@ -20,6 +24,6 @@ package com.cnendata.dev.collector.task;
  * 
  *         since1.0
  */
-public abstract class AbstractTask {
-	public abstract void execute();
+public interface IParser {
+	public abstract Product parse(Document doc);
 }
