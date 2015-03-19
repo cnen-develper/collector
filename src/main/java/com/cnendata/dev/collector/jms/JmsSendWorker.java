@@ -10,6 +10,8 @@ import javax.jms.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gson.Gson;
+
 public class JmsSendWorker {
 	private static Logger logger = LoggerFactory.getLogger(JmsSendWorker.class);
 
@@ -55,6 +57,7 @@ public class JmsSendWorker {
 	public synchronized void doSendResultToKernel(ApplicationRequest request) {
 		ObjectMessage msg;
 		try {
+			logger.debug(new Gson().toJson(request.getProduct()));
 			msg = session.createObjectMessage(request);
 			producer.send(msg);
 		} catch (JMSException e) {

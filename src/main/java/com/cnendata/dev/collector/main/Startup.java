@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.cnendata.dev.collector.jms.JmsQueueManager;
-import com.cnendata.dev.collector.threadpool.ThreadPool;
 import com.cnendata.dev.collector.website.CollectorManager;
 import com.cnendata.dev.util.PropertiesUtil;
 
@@ -42,21 +41,21 @@ public class Startup {
 		logger.debug("collector startup...");
 		// 读取config.properties配置文件中的线程池数量
 		Properties prop = PropertiesUtil.getProperties("/config.properties");
-		System.setProperty("collectorCode",
-				String.valueOf(prop.get("collectorCode")));
+		System.setProperty("threadCount", prop.getProperty("threadCount"));
 
 		// 初始化线程池
-		ThreadPool threadPool = ThreadPool.getThreadPool(Integer.valueOf(String
-				.valueOf(prop.get("threadCount"))));
+		// ThreadPool threadPool =
+		// ThreadPool.getThreadPool(Integer.valueOf(String
+		// .valueOf(prop.get("threadCount"))));
 
 		// 启动jms管理器
 		JmsQueueManager.getInstance().init(prop);
 		// 启动主采集器
 		new CollectorManager().start();
 		// 启动url处理引擎
-		new UrlEngine(threadPool).start();
+		new UrlEngine().start();
 		// 启动document解析引擎
-		new DocumentEngine(threadPool).start();
+		new DocumentEngine().start();
 
 	}
 

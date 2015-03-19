@@ -70,23 +70,26 @@ public class DangdangParser extends AbstractParser {
 					.get(0).getElementsByClass("clearfix");
 			for (int i = 0; i < bookInfoEls.size(); i++) {
 				Element tmpEl = bookInfoEls.get(i);
-				String tagSrc = tmpEl.getElementsByClass("show_info_left")
-						.get(0).text();
-				String tagCn = Strings.getCnCharacter(tagSrc);
-				String value = tmpEl.getElementsByClass("show_info_right")
-						.get(0).text();
-				logger.debug(tagCn + "=" + value);
-				if (tagCn.contains("作者")) {
-					book.setAuthor(value);
-				} else if (tagCn.contains("出版社")) {
-					book.setPublisher(value);
-				} else if (tagCn.contains("出版时间")) {
-					book.setPublishDate(new SimpleDateFormat("yyyy-MM-dd")
-							.parse(value));
-				} else if (tagCn == null || tagCn.equals("")) {
-					if (tagSrc.contains("ＩＳＢＮ")) {
-						book.setIsbn(value);
+				try {
+					String tagSrc = tmpEl.getElementsByClass("show_info_left")
+							.get(0).text();
+					String tagCn = Strings.getCnCharacter(tagSrc);
+					String value = tmpEl.getElementsByClass("show_info_right")
+							.get(0).text();
+					if (tagCn.contains("作者")) {
+						book.setAuthor(value);
+					} else if (tagCn.contains("出版社")) {
+						book.setPublisher(value);
+					} else if (tagCn.contains("出版时间")) {
+						book.setPublishDate(new SimpleDateFormat("yyyy-MM-dd")
+								.parse(value));
+					} else if (tagCn == null || tagCn.equals("")) {
+						if (tagSrc.contains("ＩＳＢＮ")) {
+							book.setIsbn(value);
+						}
 					}
+				} catch (Exception e) {
+					logger.error("parse Document book_messbox error", e);
 				}
 			}
 			Element contentEl = doc.getElementById("content")

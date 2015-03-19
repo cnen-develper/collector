@@ -11,7 +11,8 @@ import com.cnendata.dev.collector.model.MyUrl;
 import com.cnendata.dev.collector.queue.UrlQueue;
 import com.cnendata.dev.collector.task.AbstractTask;
 import com.cnendata.dev.collector.task.UrlTask;
-import com.cnendata.dev.collector.threadpool.ThreadPool;
+import com.cnendata.dev.collector.threadpool.ThreadPoolFactory;
+import com.cnendata.dev.collector.threadpool.ThreadPoolUrl;
 
 /**
  * 监视url队列，使用线程处理队列中的url<br>
@@ -27,10 +28,9 @@ import com.cnendata.dev.collector.threadpool.ThreadPool;
  *         since1.0
  */
 public class UrlEngine extends Thread {
-	private ThreadPool threadPool = null;
 
-	public UrlEngine(ThreadPool th) {
-		this.threadPool = th;
+	public UrlEngine() {
+
 	}
 
 	@Override
@@ -40,7 +40,9 @@ public class UrlEngine extends Thread {
 			MyUrl url = UrlQueue.getInstance().take();
 			if (url != null) {
 				AbstractTask task = new UrlTask(url);
-				threadPool.get().startTask(task);
+				ThreadPoolFactory.getInstance()
+						.getThredPool(ThreadPoolUrl.class).get()
+						.startTask(task);
 			}
 		}
 

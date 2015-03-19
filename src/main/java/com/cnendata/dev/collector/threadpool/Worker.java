@@ -69,6 +69,7 @@ extends Thread {
 				this.task = null;
 			} else {
 				try {
+					logger.debug("Thread " + id + "wait...");
 					wait();
 				} catch (InterruptedException e) {
 
@@ -81,7 +82,7 @@ extends Thread {
 	/**
 	 * 清出先撑资源，关闭线程
 	 */
-	public synchronized void release() {
+	public void release() {
 		if (this.getStatus() != Worker.CLOSED) {
 			isRunning = false;
 			if (this.getStatus() == Worker.IDLE) {

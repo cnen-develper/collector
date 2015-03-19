@@ -1,5 +1,5 @@
 /**
- *ThreadPool.java
+ *ThreadPoolUrl.java
  *Version1.0
  *2015-3-16
  *Copyright cnendata.com
@@ -17,7 +17,7 @@ import com.cnendata.dev.collector.queue.UrlQueue;
 import com.google.common.collect.Lists;
 
 /**
- * descript<br>
+ * Url引擎使用的线程池<br>
  * <!--<br>
  * 历史记录：<br>
  * --------------------------------------------------------
@@ -29,9 +29,8 @@ import com.google.common.collect.Lists;
  * 
  *         since1.0
  */
-public class ThreadPool {
-	private static Logger logger = LoggerFactory.getLogger(ThreadPool.class);
-	private static ThreadPool instance;
+public class ThreadPoolUrl implements IThreadPool {
+	private static Logger logger = LoggerFactory.getLogger(ThreadPoolUrl.class);
 	private static List<Worker> pool = Lists.newArrayList();// 线程队列
 	private static int threadNum = 10;
 
@@ -41,35 +40,14 @@ public class ThreadPool {
 	 * @param threadNum
 	 * @return
 	 */
-	public static ThreadPool getThreadPool(int num) {
-		if (instance == null) {
-			logger.debug("create " + num + " threads add to threadPool");
-			instance = new ThreadPool();
-			threadNum = num;
-			for (int i = 0; i < num; i++) {
-				Worker wt = new Worker(i);
-				wt.start();
-				pool.add(wt);
-			}
-
-		}
-		int xiangchaNum = num > threadNum ? (num - threadNum) : 0;
-		for (int i = 0; i < xiangchaNum; i++) {
+	public void init(int num) {
+		threadNum = num;
+		for (int i = 0; i < num; i++) {
 			Worker wt = new Worker(i);
 			wt.start();
 			pool.add(wt);
 		}
-		return instance;
 
-	}
-
-	/**
-	 * 使用默认的线程数目构造线程池
-	 * 
-	 * @return
-	 */
-	public static ThreadPool getTheadPool() {
-		return getThreadPool(50);// 默认生成50个线程
 	}
 
 	public Worker get() {
@@ -119,9 +97,6 @@ public class ThreadPool {
 
 	}
 
-	/**
-	 * 
-	 */
 	public void shutdown() {
 		logger.info("threadPool shutdown...");
 		int urlSize = UrlQueue.getInstance().getTaskSize();

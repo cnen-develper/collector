@@ -11,7 +11,8 @@ import com.cnendata.dev.collector.model.MyDocument;
 import com.cnendata.dev.collector.queue.DocumentQueue;
 import com.cnendata.dev.collector.task.AbstractTask;
 import com.cnendata.dev.collector.task.ParserTask;
-import com.cnendata.dev.collector.threadpool.ThreadPool;
+import com.cnendata.dev.collector.threadpool.ThreadPoolDoc;
+import com.cnendata.dev.collector.threadpool.ThreadPoolFactory;
 
 /**
  * descript<br>
@@ -28,10 +29,8 @@ import com.cnendata.dev.collector.threadpool.ThreadPool;
  */
 public class DocumentEngine extends Thread {
 
-	private ThreadPool threadPool = null;
+	public DocumentEngine() {
 
-	public DocumentEngine(ThreadPool th) {
-		this.threadPool = th;
 	}
 
 	@Override
@@ -40,7 +39,9 @@ public class DocumentEngine extends Thread {
 			MyDocument doc = DocumentQueue.getInstance().take();
 			if (doc != null) {
 				AbstractTask task = new ParserTask(doc);
-				threadPool.get().startTask(task);
+				ThreadPoolFactory.getInstance()
+						.getThredPool(ThreadPoolDoc.class).get()
+						.startTask(task);
 			}
 		}
 	}
