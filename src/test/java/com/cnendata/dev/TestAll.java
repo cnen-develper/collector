@@ -10,6 +10,13 @@ package com.cnendata.dev;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
+import com.cnendata.dev.collector.jms.AllJms;
+import com.cnendata.dev.collector.queue.AllQueue;
+import com.cnendata.dev.collector.task.AllTask;
+import com.cnendata.dev.collector.threadpool.AllThreadPool;
+import com.cnendata.dev.collector.website.AllWebsite;
+import com.cnendata.dev.util.AllUtil;
+
 /**
  * descript<br>
  * <!--<br>
@@ -24,7 +31,7 @@ import org.junit.runners.Suite;
  *         since1.0
  */
 @RunWith(Suite.class)
-// @Suite.SuiteClasses({ AllUtil.class, AllJms.class, AllParser.class,
-// AllQueue.class, AllTask.class, AllThreadPool.class, AllWebsite.class })
+@Suite.SuiteClasses({ AllUtil.class, AllJms.class, AllQueue.class,
+		AllTask.class, AllThreadPool.class, AllWebsite.class })
 public class TestAll {
 }
