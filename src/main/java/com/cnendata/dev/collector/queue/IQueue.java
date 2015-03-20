@@ -26,4 +26,6 @@ public interface IQueue {
 	public ITask take();
 
 	public void push(ITask task);
+
+	public int size();
 }

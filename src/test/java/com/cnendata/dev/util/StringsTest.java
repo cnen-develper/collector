@@ -8,17 +8,20 @@ public class StringsTest {
 
 	@Test
 	public void testGet() {
-		assertTrue(true);
+		String eng = Strings.get("我i 是am中国American人", "[a-zA-Z]");
+		assertTrue("iamAmerican".equals(eng));
 	}
 
 	@Test
 	public void testGetCnCharacter() {
-		assertTrue(true);
+		String cn = Strings.getCnCharacter("我i 是am中国American人.");
+		assertTrue("我是中国人".equals(cn));
 	}
 
 	@Test
 	public void testGetEnCharacter() {
-		assertTrue(true);
+		String eng = Strings.getEnCharacter("我i 是am中国American人");
+		assertTrue("iamAmerican".equals(eng));
 	}
 
 }

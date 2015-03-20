@@ -38,14 +38,6 @@ public class QueueImpl implements IQueue {
 		list = new LinkedBlockingDeque<ITask>(100);
 	}
 
-	// public static QueueImpl getInstance() {
-	// if (instance == null) {
-	// instance = new QueueImpl();
-	//
-	// }
-	// return instance;
-	// }
-
 	public void push(ITask task) {
 		list.offer(task);
 	}
@@ -63,7 +55,7 @@ public class QueueImpl implements IQueue {
 	/**
 	 * @return
 	 */
-	public int getTaskSize() {
+	public int size() {
 		return list.size();
 	}
 
