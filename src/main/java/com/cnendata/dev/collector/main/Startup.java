@@ -43,6 +43,11 @@ public class Startup {
 	 * @throws
 	 */
 	public static void main(String[] args) throws Exception {
+		new Startup().init();
+	}
+
+	public void init() throws Exception {
+
 		logger.debug("collector startup...");
 		// 读取config.properties配置文件中的线程池数量
 		Properties prop = PropertiesUtil.getProperties("/config.properties");
