@@ -53,30 +53,19 @@ public class Startup {
 		Properties prop = PropertiesUtil.getProperties("/config.properties");
 		System.setProperty("threadCount", prop.getProperty("threadCount"));
 
-		// 初始化线程池
-		// ThreadPool threadPool =
-		// ThreadPool.getThreadPool(Integer.valueOf(String
-		// .valueOf(prop.get("threadCount"))));
-
 		// 启动jms管理器
 		JmsQueueManager.getInstance().init(prop);
 
-		// ThreadPoolFactory.getInstance();
 		IQueue urlQueue = new QueueImpl();
 		IQueue docQueue = new QueueImpl();
-		// IQueue[] queues = { new QueueImpl(), new QueueImpl() };
 		QueueManager.getInstance().put(QueueManager.URL_QUEUE, urlQueue);
 		QueueManager.getInstance().put(QueueManager.DOC_QUEUE, docQueue);
+
 		IThreadPool urlPool = new ThreadPoolImpl(urlQueue);
 		urlPool.init(Integer.valueOf(prop.getProperty("threadCount")));
 		IThreadPool docPool = new ThreadPoolImpl(docQueue);
 		docPool.init(Integer.valueOf(prop.getProperty("threadCount")));
 
-		// 启动url处理引擎
-		// new UrlEngine().start();
-		// 启动document解析引擎
-		// new DocumentEngine().start();
-		System.out.println("aaa");
 		// 启动主采集器
 		new CollectorManager(urlQueue).start();
 
