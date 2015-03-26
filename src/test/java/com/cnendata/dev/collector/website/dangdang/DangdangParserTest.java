@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.cnendata.dev.collector.model.Product;
+import com.cnendata.dev.collector.website.dangdang.book.DangdangParser;
 import com.google.gson.Gson;
 
 public class DangdangParserTest {

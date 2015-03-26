@@ -4,6 +4,7 @@ import junit.framework.TestCase;
 
 import com.cnendata.dev.collector.queue.IQueue;
 import com.cnendata.dev.collector.queue.QueueImpl;
+import com.cnendata.dev.collector.website.dangdang.book.DangdangCollector;
 
 public class DangdangCollectorTest extends TestCase {
 

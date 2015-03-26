@@ -4,36 +4,53 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import com.cnendata.dev.collector.queue.IQueue;
+import com.cnendata.dev.collector.queue.QueueImpl;
+
 public class ThreadPoolImplTest {
 
 	@Test
-	public void testThreadPoolImpl() {
-		assertTrue(true);
-	}
-
-	@Test
 	public void testInit() {
-		assertTrue(true);
+		IQueue queue = new QueueImpl();
+		IThreadPool tp = new ThreadPoolImpl(queue);
+		tp.init(50);
+		assertTrue(tp.getIdleCount() == 50);
 	}
 
 	@Test
 	public void testGet() {
-		assertTrue(true);
+		IQueue queue = new QueueImpl();
+		IThreadPool tp = new ThreadPoolImpl(queue);
+		tp.init(50);
+		Worker worker = tp.get();
+		assertTrue(worker != null);
 	}
 
 	@Test
 	public void testGetIdleCount() {
-		assertTrue(true);
+
+		IQueue queue = new QueueImpl();
+		IThreadPool tp = new ThreadPoolImpl(queue);
+		tp.init(50);
+		assertTrue(tp.getIdleCount() == 50);
 	}
 
 	@Test
 	public void testGetBusyCount() {
-		assertTrue(true);
+
+		IQueue queue = new QueueImpl();
+		IThreadPool tp = new ThreadPoolImpl(queue);
+		tp.init(50);
+		assertTrue(tp.getBusyCount() == 50);
 	}
 
 	@Test
 	public void testGetClosedCount() {
-		assertTrue(true);
+
+		IQueue queue = new QueueImpl();
+		IThreadPool tp = new ThreadPoolImpl(queue);
+		tp.init(50);
+		assertTrue(tp.getClosedCount() == 0);
 	}
 
 	@Test
