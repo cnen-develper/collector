@@ -11,7 +11,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 商品信息<br>
+ * 商品信息，所有小得商品品类都必须继承该类<br>
  * <!--<br>
  * 历史记录：<br>
  * --------------------------------------------------------
@@ -28,13 +28,7 @@ public class Product implements Serializable {
 	private String name;// 书名
 	private String descript;// 简介
 	private String url;
-	private Long itemId;// 对应的采集器id
 	private Date updateTime;// 采集更新日期
-	private String author;// 作者
-	private String translator;// 译者
-	private String publisher;// 出版社
-	private Date publishDate;// 出版日期
-	private String isbn;
 	private Float price;// 定价
 	private Float shopPrice;// 商城价
 	private Integer rank;// 排行榜
@@ -73,52 +67,12 @@ public class Product implements Serializable {
 		this.url = url;
 	}
 
-	public Long getItemId() {
-		return itemId;
-	}
-
-	public void setItemId(Long itemId) {
-		this.itemId = itemId;
-	}
-
 	public Date getUpdateTime() {
 		return updateTime;
 	}
 
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
-	}
-
-	public String getAuthor() {
-		return author;
-	}
-
-	public void setAuthor(String author) {
-		this.author = author;
-	}
-
-	public String getTranslator() {
-		return translator;
-	}
-
-	public void setTranslator(String translator) {
-		this.translator = translator;
-	}
-
-	public String getPublisher() {
-		return publisher;
-	}
-
-	public void setPublisher(String publisher) {
-		this.publisher = publisher;
-	}
-
-	public String getIsbn() {
-		return isbn;
-	}
-
-	public void setIsbn(String isbn) {
-		this.isbn = isbn;
 	}
 
 	public Float getPrice() {
@@ -151,14 +105,6 @@ public class Product implements Serializable {
 
 	public void setCommentCount(Integer commentCount) {
 		this.commentCount = commentCount;
-	}
-
-	public Date getPublishDate() {
-		return publishDate;
-	}
-
-	public void setPublishDate(Date publishDate) {
-		this.publishDate = publishDate;
 	}
 
 	public String getImg() {
