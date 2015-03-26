@@ -5,7 +5,7 @@
  *Copyright cnendata.com
  *
  */
-package com.cnendata.dev.collector.website.dangdang;
+package com.cnendata.dev.collector.website.dangdang.book;
 
 import java.text.SimpleDateFormat;
 
@@ -15,6 +15,7 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.cnendata.dev.collector.model.Book;
 import com.cnendata.dev.collector.model.Product;
 import com.cnendata.dev.collector.parser.IParser;
 import com.cnendata.dev.util.Strings;
@@ -44,7 +45,7 @@ public class DangdangParser implements IParser {
 	public Product parse(Document doc) {
 
 		try {
-			Product book = new Product();
+			Book book = new Book();
 			Element element = doc.getElementsByClass("show_info_autoheight")
 					.get(0);
 			Element headEl = element.getElementsByClass("head").get(0);

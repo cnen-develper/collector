@@ -5,7 +5,7 @@
  *Copyright cnendata.com
  *
  */
-package com.cnendata.dev.collector.website.dangdang;
+package com.cnendata.dev.collector.website.dangdang.book;
 
 import java.io.IOException;
 
